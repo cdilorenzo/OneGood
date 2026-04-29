@@ -8,11 +8,12 @@ namespace OneGood.Maui.Services;
 public class ApiService
 {
     private readonly HttpClient _httpClient;
-    public string BaseUrl { get; set; } = "https://localhost:7013"; // TODO: Set your API base URL
+    public string BaseUrl { get; set; }
 
     public ApiService(HttpClient? httpClient = null)
     {
         _httpClient = httpClient ?? new HttpClient();
+        BaseUrl = ConfigurationHelper.GetApiBaseUrl() ?? "https://localhost:7013";
     }
 
     public async Task<List<CauseSummaryDto>> GetCausesAsync()
