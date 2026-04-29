@@ -1,0 +1,6 @@
+@OneGood.Api_HostAddress = http://localhost:5130
+
+GET {{OneGood.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

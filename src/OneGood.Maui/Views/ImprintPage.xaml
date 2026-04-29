@@ -1,0 +1,12 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="OneGood.Maui.Views.ImprintPage"
+             Title="{x:Static local:Resources.legal_imprint_title}">
+    <ScrollView>
+        <VerticalStackLayout Padding="20">
+            <Label Text="{x:Static local:Resources.legal_imprint_intro}" FontAttributes="Bold" />
+            <Label Text="Claudio Di Lorenzo" Margin="0,10,0,0" />
+            <Label Text="{x:Static local:Resources.legal_email_label}: cldilorenzo.cdl@gmail.com" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

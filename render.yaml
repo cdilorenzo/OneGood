@@ -1,0 +1,28 @@
+# Render Blueprint - OneGood
+# Deploy with: Connect repo on Render dashboard, it will auto-detect this file
+#
+# FREE EXTERNAL SERVICES:
+#   1. Database:  neon.tech     → free PostgreSQL (0.5 GB) — connection string in appsettings.json
+#   2. Cache:     upstash.com   → free Redis (optional, set env var if used)
+#   3. AI:        Gemini        → API key in appsettings.json
+#
+# The KeepAlive service pings /health every 14 min to prevent Render free tier sleep.
+
+services:
+  - type: web
+    name: onegood
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    envVars:
+      # Database — Postgres on Render, connection string already in appsettings.json
+      - key: Database__Provider
+        value: Postgres
+
+      # Keep-alive — pings /health every 14 min to prevent free tier sleeping
+      - key: KeepAlive__Url
+        value: https://onegood.onrender.com/health
+
+      # Gemini AI — API key already in appsettings.json
+      - key: Gemini__Model
+        value: gemma-3-27b-it
+    healthCheckPath: /health

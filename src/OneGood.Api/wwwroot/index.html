@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="theme-color" content="#0a0e27" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>OneGood – Do one good thing today</title>
+    <link rel="stylesheet" href="/css/app.min.css" />
+</head>
+<body class="min-h-dvh bg-slate-900 text-slate-100">
+    <div id="app" class="min-h-dvh flex items-center justify-center px-3 py-3">
+        <!-- Loading State -->
+        <div id="loading" class="text-center">
+            <div class="loader mx-auto mb-4"></div>
+            <p class="text-slate-400 text-sm" data-i18n="loading">Loading today's action...</p>
+        </div>
+
+        <!-- Main Content (hidden initially) -->
+        <main id="content" class="hidden w-full max-w-md">
+
+            <!-- Action Type Filter -->
+            <div id="type-filter" class="flex gap-1.5 mb-4 overflow-x-auto pb-1">
+                <button class="type-pill active" data-type="">🌍 <span data-i18n="allTypes">All</span></button>
+                <button class="type-pill" data-type="Donate">💝 <span data-i18n="typeDonate">Donate</span></button>
+                <button class="type-pill" data-type="Sign">✍️ <span data-i18n="typePetitions">Petitions</span></button>
+                <button class="type-pill" data-type="Write">✉️ <span data-i18n="typeLetters">Letters</span></button>
+            </div>
+
+            <!-- Action Card -->
+            <article id="action-card" class="hidden flex flex-col gap-3">
+                <span id="category" class="self-start px-3 py-1 text-xs font-semibold uppercase tracking-wide bg-emerald-900/50 text-emerald-400 rounded-full"></span>
+
+                <!-- Headline -->
+                <h1 id="headline" class="text-xl sm:text-2xl md:text-3xl font-bold leading-tight"></h1>
+
+                <!-- Urgency Block -->
+                <div id="urgency-block" class="hidden flex gap-3 p-3 bg-amber-900/30 border border-amber-700/50 rounded-xl">
+                    <span class="text-base">⏰</span>
+                    <div class="flex-1">
+                        <span class="block text-xs font-semibold uppercase tracking-wide text-amber-500 mb-1" data-i18n="whyNow">Why Now</span>
+                        <p id="why-now" class="text-amber-200 text-sm leading-relaxed"></p>
+                        <span id="whynow-badge" class="content-badge ai-badge mt-1">✨ <span data-i18n="aiGenerated">AI-generated</span></span>
+                    </div>
+                </div>
+
+                <!-- Story Block -->
+                <div class="flex gap-3 p-3 bg-slate-800/50 border border-slate-700 rounded-xl">
+                    <span class="text-base">📖</span>
+                    <div class="flex-1 min-w-0">
+                        <span id="story-label" class="block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1" data-i18n="theStory">The Story</span>
+                        <p id="summary" class="text-slate-200 text-sm leading-relaxed"></p>
+                        <div class="flex items-center gap-3 mt-2">
+                            <span id="story-badge" class="content-badge ai-badge">✨ <span data-i18n="aiSummary">AI summary</span></span>
+                            <span id="story-badge-original" class="content-badge original-badge hidden">📄 <span data-i18n="originalText">Original text</span></span>
+                            <a id="source-link" href="#" target="_blank" rel="noopener" class="text-xs text-slate-400 hover:text-emerald-400"></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Impact Block -->
+                <div id="impact-block" class="hidden flex gap-3 p-3 bg-emerald-900/30 border border-emerald-700/50 rounded-xl">
+                    <span class="text-base">💚</span>
+                    <div class="flex-1">
+                        <span id="impact-label" class="block text-xs font-semibold uppercase tracking-wide text-emerald-500 mb-1" data-i18n="yourImpact">Your Impact</span>
+                        <p id="impact" class="text-emerald-200 text-sm leading-relaxed"></p>
+                        <span id="impact-badge" class="content-badge ai-badge mt-1">✨ <span data-i18n="aiGenerated">AI-generated</span></span>
+                    </div>
+                </div>
+
+                <!-- Action Buttons (shown before acting) -->
+                <div id="action-buttons" class="flex gap-2 mt-2">
+                    <button id="action-btn" class="flex-1 py-3.5 px-5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2">
+                        🚀 Take Action
+                    </button>
+                    <button id="share-btn" class="py-3.5 px-4 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl transition-colors flex items-center gap-1.5">
+                        🔗 <span data-i18n="share">Share</span>
+                    </button>
+                </div>
+            </article>
+
+            <!-- Error State -->
+            <div id="error-state" class="hidden text-center py-12">
+                <h2 class="text-2xl font-bold text-red-400 mb-4" data-i18n="connectionError">Connection Error</h2>
+                <button id="retry-btn" class="py-3 px-6 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2 mx-auto">
+                    🔄 <span data-i18n="retry">Retry</span>
+                </button>
+            </div>
+
+            <!-- Completion Screen (shown after acting or if already acted today) -->
+            <div id="completion-state" class="hidden text-center py-8">
+                <div class="text-6xl mb-4">🎉</div>
+                <h2 class="text-2xl font-bold text-emerald-400 mb-2" data-i18n="completionTitle">You did your OneGood today!</h2>
+                <p id="completion-headline" class="text-slate-300 text-sm mb-4"></p>
+                <div id="streak-display" class="inline-flex items-center gap-2 px-5 py-3 bg-amber-900/40 border border-amber-700/50 rounded-2xl mb-6">
+                    <span class="text-2xl">🔥</span>
+                    <span id="streak-text" class="text-amber-200 font-bold text-lg"></span>
+                </div>
+                <p class="text-slate-500 text-sm mb-6" data-i18n="comeBackTomorrow">Come back tomorrow to keep your streak going.</p>
+                <button id="explore-more-btn" class="text-slate-500 hover:text-slate-300 text-xs underline underline-offset-4 transition-colors" data-i18n="exploreMore">Explore more causes →</button>
+            </div>
+
+            <!-- No Actions State -->
+            <div id="no-actions-state" class="hidden text-center py-12">
+                <div class="text-5xl mb-4">🔍</div>
+                <h2 class="text-2xl font-bold text-slate-300 mb-2" data-i18n="allDone">All done!</h2>
+                <p class="text-slate-400 mb-4" data-i18n="noMoreActions">No more actions available right now.</p>
+            </div>
+
+            <!-- Explore Mode (hidden by default, secondary experience) -->
+            <div id="explore-mode" class="hidden">
+                <div class="flex items-center justify-between mb-3">
+                    <h2 class="text-lg font-bold text-slate-300" data-i18n="exploreCauses">Explore Causes</h2>
+                    <button id="back-to-today-btn" class="text-sm text-emerald-400 hover:text-emerald-300 transition-colors" data-i18n="backToToday">← Back</button>
+                </div>
+                <div class="mb-3 relative">
+                    <button id="filter-toggle" class="w-full flex items-center justify-between px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-sm text-slate-300 hover:bg-slate-700 transition-colors">
+                        <span class="flex items-center gap-2">
+                            <span>🏷️</span>
+                            <span id="filter-label" data-i18n="allCategories">All</span>
+                        </span>
+                        <span id="filter-chevron" class="transition-transform">▾</span>
+                    </button>
+                    <nav id="category-selector" class="hidden absolute z-20 left-0 right-0 mt-2 p-3 bg-slate-800 border border-slate-700 rounded-xl shadow-xl shadow-black/40 flex flex-wrap gap-2">
+                        <button class="category-pill active" data-category="">
+                            <span data-i18n="allCategories">All</span>
+                        </button>
+                    </nav>
+                </div>
+
+                <!-- Action Type Filter for Explore Mode -->
+                <div id="explore-type-filter" class="flex gap-1.5 mb-3 overflow-x-auto pb-1">
+                    <button class="type-pill active" data-type="">🌍 <span data-i18n="allTypes">All</span></button>
+                    <button class="type-pill" data-type="Donate">💝 <span data-i18n="typeDonate">Donate</span></button>
+                    <button class="type-pill" data-type="Sign">✍️ <span data-i18n="typePetitions">Petitions</span></button>
+                    <button class="type-pill" data-type="Write">✉️ <span data-i18n="typeLetters">Letters</span></button>
+                </div>
+
+                <!-- Explore action card (full structure with Why Now + Impact) -->
+                <article id="explore-action-card" class="hidden flex flex-col gap-3">
+                    <span id="explore-category" class="self-start px-3 py-1 text-xs font-semibold uppercase tracking-wide bg-emerald-900/50 text-emerald-400 rounded-full"></span>
+                    <h1 id="explore-headline" class="text-xl sm:text-2xl font-bold leading-tight"></h1>
+
+                    <!-- Why Now -->
+                    <div id="explore-urgency-block" class="hidden flex gap-3 p-3 bg-amber-900/30 border border-amber-700/50 rounded-xl">
+                        <span class="text-base">⏰</span>
+                        <div class="flex-1">
+                            <span class="block text-xs font-semibold uppercase tracking-wide text-amber-500 mb-1" data-i18n="whyNow">Why Now</span>
+                            <p id="explore-why-now" class="text-amber-200 text-sm leading-relaxed"></p>
+                        </div>
+                    </div>
+
+                    <!-- Story -->
+                    <div class="flex gap-3 p-3 bg-slate-800/50 border border-slate-700 rounded-xl">
+                        <span class="text-base">📖</span>
+                        <div class="flex-1 min-w-0">
+                            <p id="explore-summary" class="text-slate-200 text-sm leading-relaxed"></p>
+                            <a id="explore-source-link" href="#" target="_blank" rel="noopener" class="text-xs text-slate-400 hover:text-emerald-400 mt-2 inline-block"></a>
+                        </div>
+                    </div>
+
+                    <!-- Impact -->
+                    <div id="explore-impact-block" class="hidden flex gap-3 p-3 bg-emerald-900/30 border border-emerald-700/50 rounded-xl">
+                        <span class="text-base">💚</span>
+                        <div class="flex-1">
+                            <span class="block text-xs font-semibold uppercase tracking-wide text-emerald-500 mb-1" data-i18n="yourImpact">Your Impact</span>
+                            <p id="explore-impact" class="text-emerald-200 text-sm leading-relaxed"></p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2 mt-2">
+                        <button id="explore-action-btn" class="flex-1 py-3 px-5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2">🚀 Take Action</button>
+                        <button id="explore-skip-btn" class="py-3 px-4 bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium rounded-xl transition-colors flex items-center gap-1.5">⏭️ <span data-i18n="skip">Skip</span></button>
+                    </div>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer with legal links -->
+    <footer class="flex flex-wrap items-center justify-center gap-2 text-xs text-slate-500 py-2 px-2 w-full">
+        <span>© <span id="footer-year"></span> TuWasGutes</span>
+        <span>·</span>
+        <a href="#" id="footer-imprint-link" class="underline hover:text-emerald-400" data-i18n="legalImprint">Legal</a>
+        <span>·</span>
+        <a href="#" id="footer-privacy-link" class="underline hover:text-emerald-400" data-i18n="legalPrivacy">Privacy</a>
+        <span>·</span>
+        <a href="#" id="footer-external-link" class="underline hover:text-emerald-400" data-i18n="legalExternal">External</a>
+    </footer>
+
+    <!-- Legal Modals -->
+    <div id="legal-modal" class="fixed inset-0 z-50 hidden bg-black/60 flex items-center justify-center">
+        <div class="bg-slate-900 rounded-xl shadow-xl max-w-lg w-full p-6 relative">
+            <button id="legal-modal-close" class="absolute top-3 right-3 text-slate-400 hover:text-emerald-400 text-xl">&times;</button>
+            <div id="legal-modal-content"></div>
+        </div>
+    </div>
+
+    <div id="support-banner" class="support-banner">
+        <a href="https://ko-fi.com/claudiodilorenzo" target="_blank">
+          <img height="36" style="border:0px;height:36px;" src="https://cdn.ko-fi.com/cdn/kofi5.png?v=3" border="0" alt="Support me on Ko-fi" />
+        </a>
+        <p id="support-note" class="support-note hidden" data-i18n="supportCompletionText">This is a free service — if it helps you, please support me to cover server costs.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.7/signalr.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>

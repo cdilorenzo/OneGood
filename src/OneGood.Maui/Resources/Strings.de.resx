@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="legal.imprint" xml:space="preserve">
+	<value>Impressum</value>
+  </data>
+  <data name="legal.privacy" xml:space="preserve">
+	<value>Datenschutz</value>
+  </data>
+  <data name="legal.external" xml:space="preserve">
+	<value>Externe Inhalte</value>
+  </data>
+  <data name="legal.imprint_title" xml:space="preserve">
+	<value>Impressum</value>
+  </data>
+  <data name="legal.imprint_intro" xml:space="preserve">
+	<value>Angaben gemäß § 5 DDG</value>
+  </data>
+  <data name="legal.email_label" xml:space="preserve">
+	<value>E-Mail</value>
+  </data>
+  <data name="legal.privacy_title" xml:space="preserve">
+	<value>Datenschutz</value>
+  </data>
+  <data name="legal.privacy_intro" xml:space="preserve">
+	<value>TuWasGutes verarbeitet nur die Daten, die für den Betrieb der App notwendig sind.</value>
+  </data>
+  <data name="legal.privacy_data_points" xml:space="preserve">
+	<value>Dazu gehören insbesondere</value>
+  </data>
+  <data name="legal.data_server_logs" xml:space="preserve">
+	<value>technische Server-Logdaten</value>
+  </data>
+  <data name="legal.data_usage" xml:space="preserve">
+	<value>Nutzungsdaten für abgeschlossene oder übersprungene Aktionen</value>
+  </data>
+  <data name="legal.data_streak" xml:space="preserve">
+	<value>Streak- und Fortschrittsdaten</value>
+  </data>
+  <data name="legal.data_realtime" xml:space="preserve">
+	<value>technische Verbindungsdaten für Echtzeit-Updates</value>
+  </data>
+  <data name="legal.privacy_usage" xml:space="preserve">
+	<value>Die Daten werden ausschließlich zum Betrieb und zur Verbesserung von TuWasGutes verwendet.</value>
+  </data>
+  <data name="legal.privacy_contact" xml:space="preserve">
+	<value>Kontakt für Datenschutzanfragen</value>
+  </data>
+  <data name="legal.external_title" xml:space="preserve">
+	<value>Externe Inhalte</value>
+  </data>
+  <data name="legal.external_disclaimer" xml:space="preserve">
+	<value>TuWasGutes verlinkt auf externe Webseiten und Organisationen. Für deren Inhalte, Spendenprozesse und Datenschutzpraktiken sind ausschließlich die jeweiligen Betreiber verantwortlich.</value>
+  </data>
+  <data name="legal.external_no_donations" xml:space="preserve">
+	<value>TuWasGutes sammelt selbst keine Spenden.</value>
+  </data>
+</root>

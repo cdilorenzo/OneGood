@@ -1,0 +1,24 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="OneGood.Maui.Views.CauseListPage"
+             Title="OneGood Causes"
+             BackgroundColor="#0a0e27">
+    <StackLayout>
+        <Label Text="Today's Causes" FontSize="24" TextColor="#34d399" Margin="16,24,16,8"/>
+        <CollectionView x:Name="CausesCollection" ItemsSource="{Binding Causes}" SelectionMode="Single" SelectionChanged="OnCauseSelected">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="12,6" Padding="12" BackgroundColor="#1e293b" CornerRadius="12" HasShadow="True">
+                        <StackLayout>
+                            <Label Text="{Binding Headline}" FontSize="18" TextColor="#fff" FontAttributes="Bold"/>
+                            <Label Text="{Binding Description}" FontSize="14" TextColor="#cbd5e1" LineBreakMode="TailTruncation" MaxLines="2"/>
+                            <ProgressBar Progress="{Binding Progress}" HeightRequest="6" Margin="0,8,0,0"/>
+                            <Label Text="{Binding ProgressText}" FontSize="12" TextColor="#34d399"/>
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <views:FooterView />
+    </StackLayout>
+</ContentPage>

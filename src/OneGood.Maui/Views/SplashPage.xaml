@@ -1,0 +1,11 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="OneGood.Maui.Views.SplashPage"
+             BackgroundColor="#0a0e27">
+    <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Spacing="24">
+        <Image Source="dotnet_bot.png" WidthRequest="120" HeightRequest="120"/>
+        <Label Text="OneGood" FontSize="36" TextColor="#34d399" FontAttributes="Bold" HorizontalOptions="Center"/>
+        <ActivityIndicator IsRunning="True" Color="#34d399"/>
+        <Label Text="Loading..." TextColor="White" FontSize="18" HorizontalOptions="Center"/>
+    </StackLayout>
+</ContentPage>

@@ -1,0 +1,18 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="OneGood.Maui.Views.PrivacyPage"
+             Title="{x:Static local:Resources.legal_privacy_title}">
+    <ScrollView>
+        <VerticalStackLayout Padding="20">
+            <Label Text="{x:Static local:Resources.legal_privacy_intro}" FontAttributes="Bold" />
+            <Label Text="{x:Static local:Resources.legal_privacy_data_points}" Margin="0,10,0,0" />
+            <Label Text="- {x:Static local:Resources.legal_data_server_logs}" />
+            <Label Text="- {x:Static local:Resources.legal_data_usage}" />
+            <Label Text="- {x:Static local:Resources.legal_data_streak}" />
+            <Label Text="- {x:Static local:Resources.legal_data_realtime}" />
+            <Label Text="{x:Static local:Resources.legal_privacy_usage}" Margin="0,10,0,0" />
+            <Label Text="Anonymous user data is stored for tracking your streak and progress. No personal identification is stored." Margin="0,10,0,0" />
+            <Label Text="{x:Static local:Resources.legal_privacy_contact}: cldilorenzo.cdl@gmail.com" Margin="0,10,0,0" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

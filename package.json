@@ -1,0 +1,12 @@
+{
+  "name": "onegood-ui",
+  "version": "1.0.0",
+  "scripts": {
+    "build:css": "npx tailwindcss -c tailwind.config.js -i src/OneGood.Api/wwwroot/css/app.css -o src/OneGood.Api/wwwroot/css/app.min.css --minify",
+    "watch:css": "npx tailwindcss -c tailwind.config.js -i src/OneGood.Api/wwwroot/css/app.css -o src/OneGood.Api/wwwroot/css/app.min.css --watch"
+  },
+  "devDependencies": {
+    "eslint": "^10.2.0",
+    "tailwindcss": "^3.4.0"
+  }
+}

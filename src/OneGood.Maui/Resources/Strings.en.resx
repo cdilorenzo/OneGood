@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="legal.imprint" xml:space="preserve">
+	<value>Legal</value>
+  </data>
+  <data name="legal.privacy" xml:space="preserve">
+	<value>Privacy</value>
+  </data>
+  <data name="legal.external" xml:space="preserve">
+	<value>External</value>
+  </data>
+  <data name="legal.imprint_title" xml:space="preserve">
+	<value>Legal Notice</value>
+  </data>
+  <data name="legal.imprint_intro" xml:space="preserve">
+	<value>Information according to § 5 DDG</value>
+  </data>
+  <data name="legal.email_label" xml:space="preserve">
+	<value>Email</value>
+  </data>
+  <data name="legal.privacy_title" xml:space="preserve">
+	<value>Privacy Policy</value>
+  </data>
+  <data name="legal.privacy_intro" xml:space="preserve">
+	<value>TuWasGutes only processes data required to operate the app.</value>
+  </data>
+  <data name="legal.privacy_data_points" xml:space="preserve">
+	<value>This includes in particular</value>
+  </data>
+  <data name="legal.data_server_logs" xml:space="preserve">
+	<value>technical server log data</value>
+  </data>
+  <data name="legal.data_usage" xml:space="preserve">
+	<value>usage data for completed or skipped actions</value>
+  </data>
+  <data name="legal.data_streak" xml:space="preserve">
+	<value>streak and progress data</value>
+  </data>
+  <data name="legal.data_realtime" xml:space="preserve">
+	<value>technical connection data for real-time updates</value>
+  </data>
+  <data name="legal.privacy_usage" xml:space="preserve">
+	<value>The data is used solely to operate and improve TuWasGutes.</value>
+  </data>
+  <data name="legal.privacy_contact" xml:space="preserve">
+	<value>Contact for privacy requests</value>
+  </data>
+  <data name="legal.external_title" xml:space="preserve">
+	<value>External Content</value>
+  </data>
+  <data name="legal.external_disclaimer" xml:space="preserve">
+	<value>TuWasGutes links to external websites and organizations. Their operators are solely responsible for their content, donation processes, and privacy practices.</value>
+  </data>
+  <data name="legal.external_no_donations" xml:space="preserve">
+	<value>TuWasGutes does not collect donations itself.</value>
+  </data>
+</root>

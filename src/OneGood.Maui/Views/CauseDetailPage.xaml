@@ -1,0 +1,19 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="OneGood.Maui.Views.CauseDetailPage"
+             Title="Cause Details"
+             BackgroundColor="#0a0e27">
+    <ScrollView>
+        <StackLayout Padding="16" Spacing="18">
+            <Label Text="{Binding Headline}" FontSize="24" TextColor="#34d399" FontAttributes="Bold"/>
+            <Label Text="{Binding Description}" FontSize="16" TextColor="#fff"/>
+            <ProgressBar Progress="{Binding Progress}" HeightRequest="8"/>
+            <Label Text="{Binding ProgressText}" FontSize="14" TextColor="#34d399"/>
+            <Label Text="{Binding ImpactStatement}" FontSize="14" TextColor="#cbd5e1"/>
+            <Label Text="{Binding Status}" FontSize="14" TextColor="#fbbf24"/>
+            <Button Text="Take Action" Command="{Binding TakeActionCommand}" BackgroundColor="#34d399" TextColor="#fff"/>
+            <Button Text="Share" Command="{Binding ShareCommand}" BackgroundColor="#1e293b" TextColor="#fff"/>
+            <Button Text="View Source" Command="{Binding OpenSourceCommand}" BackgroundColor="#0a0e27" TextColor="#60a5fa"/>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

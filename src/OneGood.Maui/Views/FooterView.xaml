@@ -1,0 +1,13 @@
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="OneGood.Maui.Views.FooterView">
+    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="10" Padding="10">
+        <Label Text="© {Binding CurrentYear}" />
+        <Label Text="TuWasGutes ·" />
+        <Label Text="{Binding Imprint}" TextDecorations="Underline" TextColor="Blue" GestureRecognizers="{Binding ImprintTap}" />
+        <Label Text="·" />
+        <Label Text="{Binding Privacy}" TextDecorations="Underline" TextColor="Blue" GestureRecognizers="{Binding PrivacyTap}" />
+        <Label Text="·" />
+        <Label Text="{Binding External}" TextDecorations="Underline" TextColor="Blue" GestureRecognizers="{Binding ExternalTap}" />
+    </StackLayout>
+</ContentView>
