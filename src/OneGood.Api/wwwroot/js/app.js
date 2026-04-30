@@ -8,166 +8,14 @@ const STORAGE_KEY_STREAK = 'onegood_streak';
 const STORAGE_KEY_TODAY = 'onegood_today_completion';
 
 // ============ i18n (Internationalization) ============
-const translations = {
-    en: {
-        loading: "Loading today's action...",
-        theStory: "The Story",
-        aiSummary: "✨ AI summary",
-        yourImpact: "Your Impact",
-        skip: "Skip",
-        opened: "Opened ↗",
-        openedMessage: "The cause page has been opened. Take action there if you can!",
-        showNext: "Next cause",
-        browseMore: "Browse more causes →",
-        connectionError: "Connection Error",
-        retry: "Retry",
-        allDone: "All done!",
-        noMoreActions: "No more actions available right now.",
-        noMoreInCategory: "No more in this category",
-        tryAnotherCategory: "Try another category or browse all causes.",
-        showAllCauses: "Show all causes",
-        donate: "Donate",
-        sign: "Sign Petition",
-        write: "Write Letter",
-        share: "Share",
-        linkCopied: "Link copied!",
-        takeAction: "Take Action",
-        causesExplored: "{count} causes explored today",
-        causeExplored: "1 cause explored today",
-        allCategories: "All",
-        filterByCategory: "Filter by category",
-        aiGenerated: "AI-generated",
-        aiSummary: "AI summary",
-        whyNow: "Why Now",
-        originalText: "Original text",
-        showOriginal: "Show original",
-        showAiSummary: "Show AI summary",
-        allTypes: "All",
-        typeDonate: "Donate",
-        typePetitions: "Petitions",
-        typeLetters: "Letters",
-        completionTitle: "You did your OneGood today!",
-        comeBackTomorrow: "Come back tomorrow to keep your streak going.",
-        exploreMore: "Explore more causes \u2192",
-        streakDay: "Day {count}",
-        streakMessage: "You\u2019ve done something good {count} days in a row.",
-        streakFirstDay: "Day 1 \u2014 Your streak begins!",
-        exploreCauses: "Explore Causes",
-        backToToday: "\u2190 Back",
-        supportShort: "Support this free service",
-        supportCompletionText: "This is a free service — if it helps you, please support me to cover server costs.",
-        // Legal
-        legalImprint: "Legal",
-        legalPrivacy: "Privacy",
-        legalExternal: "External",
-        legalImprintTitle: "Legal Notice",
-        legalImprintIntro: "Information according to § 5 DDG",
-        legalImprintName: "Claudio Di Lorenzo",
-        legalImprintEmail: "Email: cldilorenzo.cdl@gmail.com",
-        legalPrivacyTitle: "Privacy Policy",
-        legalPrivacyIntro: "TuWasGutes only processes data required to operate the app.",
-        legalPrivacyDataPoints: "This includes in particular:",
-        legalPrivacyDataList: "- technical server log data<br>- usage data for completed or skipped actions<br>- streak and progress data (anonymous)<br>- technical connection data for real-time updates",
-        legalPrivacyUsage: "The data is used solely to operate and improve TuWasGutes.",
-        legalPrivacyAnon: "Anonymous user data is stored for tracking your streak and progress. No personal identification is stored.",
-        legalPrivacyContact: "Contact for privacy requests: cldilorenzo.cdl@gmail.com",
-        legalExternalTitle: "External Content",
-        legalExternalDisclaimer: "TuWasGutes links to external websites and organizations. Their operators are solely responsible for their content, donation processes, and privacy practices.",
-        legalExternalNoDonations: "TuWasGutes does not collect donations itself.",
-        // Categories
-        categories: {
-            ClimateAndNature: "Climate & Nature",
-            HumanRights: "Human Rights",
-            Peace: "Peace",
-            Education: "Education",
-            CleanWater: "Clean Water",
-            FoodSecurity: "Food Security",
-            AnimalWelfare: "Animal Welfare",
-            MentalHealth: "Health",
-            Refugees: "Refugees",
-            Democracy: "Democracy"
-        }
-    },
-    de: {
-        loading: "Lade heutige Aktion...",
-        theStory: "Die Geschichte",
-        aiSummary: "✨ KI-Zusammenfassung",
-        yourImpact: "Deine Wirkung",
-        skip: "Überspringen",
-        opened: "Geöffnet ↗",
-        openedMessage: "Die Projektseite wurde geöffnet. Werde dort aktiv, wenn du kannst!",
-        showNext: "Nächstes Projekt",
-        browseMore: "Mehr Projekte entdecken →",
-        connectionError: "Verbindungsfehler",
-        retry: "Erneut versuchen",
-        allDone: "Alles erledigt!",
-        noMoreActions: "Momentan keine weiteren Aktionen verfügbar.",
-        noMoreInCategory: "Keine weiteren in dieser Kategorie",
-        tryAnotherCategory: "Probiere eine andere Kategorie oder alle Projekte.",
-        showAllCauses: "Alle Projekte anzeigen",
-        donate: "Spenden",
-        sign: "Petition unterschreiben",
-        write: "Brief schreiben",
-        share: "Teilen",
-        linkCopied: "Link kopiert!",
-        takeAction: "Jetzt handeln",
-        causesExplored: "{count} Projekte angesehen heute",
-        causeExplored: "1 Projekt angesehen heute",
-        allCategories: "Alle",
-        filterByCategory: "Nach Kategorie filtern",
-        aiGenerated: "KI-generiert",
-        aiSummary: "KI-Zusammenfassung",
-        whyNow: "Warum jetzt",
-        originalText: "Originaltext",
-        showOriginal: "Original anzeigen",
-        showAiSummary: "KI-Zusammenfassung anzeigen",
-        allTypes: "Alle",
-        typeDonate: "Spenden",
-        typePetitions: "Petitionen",
-        typeLetters: "Briefe",
-        completionTitle: "Du hast dein OneGood f\u00fcr heute getan!",
-        comeBackTomorrow: "Komm morgen wieder, um deine Serie fortzusetzen.",
-        exploreMore: "Mehr Projekte entdecken \u2192",
-        streakDay: "Tag {count}",
-        streakMessage: "Du hast {count} Tage in Folge etwas Gutes getan.",
-        streakFirstDay: "Tag 1 \u2014 Deine Serie beginnt!",
-        exploreCauses: "Projekte entdecken",
-        backToToday: "\u2190 Zur\u00fcck",
-        supportShort: "Diesen kostenlosen Service unterstützen",
-        supportCompletionText: "Dies ist ein kostenloser Service — wenn er dir hilft, unterstütze mich bitte bei den Serverkosten.",
-        // Legal
-        legalImprint: "Impressum",
-        legalPrivacy: "Datenschutz",
-        legalExternal: "Externe Inhalte",
-        legalImprintTitle: "Impressum",
-        legalImprintIntro: "Angaben gemäß § 5 DDG",
-        legalImprintName: "Claudio Di Lorenzo",
-        legalImprintEmail: "E-Mail: cldilorenzo.cdl@gmail.com",
-        legalPrivacyTitle: "Datenschutz",
-        legalPrivacyIntro: "TuWasGutes verarbeitet nur die Daten, die für den Betrieb der App notwendig sind.",
-        legalPrivacyDataPoints: "Dazu gehören insbesondere:",
-        legalPrivacyDataList: "- technische Server-Logdaten<br>- Nutzungsdaten für abgeschlossene oder übersprungene Aktionen<br>- Streak- und Fortschrittsdaten (anonym)<br>- technische Verbindungsdaten für Echtzeit-Updates",
-        legalPrivacyUsage: "Die Daten werden ausschließlich zum Betrieb und zur Verbesserung von TuWasGutes verwendet.",
-        legalPrivacyAnon: "Anonyme Nutzerdaten werden zur Nachverfolgung deiner Streak und Fortschritte gespeichert. Es werden keine personenbezogenen Daten gespeichert.",
-        legalPrivacyContact: "Kontakt für Datenschutzanfragen: cldilorenzo.cdl@gmail.com",
-        legalExternalTitle: "Externe Inhalte",
-        legalExternalDisclaimer: "TuWasGutes verlinkt auf externe Webseiten und Organisationen. Für deren Inhalte, Spendenprozesse und Datenschutzpraktiken sind ausschließlich die jeweiligen Betreiber verantwortlich.",
-        legalExternalNoDonations: "TuWasGutes sammelt selbst keine Spenden.",
-        // Categories
-        categories: {
-            ClimateAndNature: "Klima & Natur",
-            HumanRights: "Menschenrechte",
-            Peace: "Frieden",
-            Education: "Bildung",
-            CleanWater: "Sauberes Wasser",
-            FoodSecurity: "Ernährung",
-            AnimalWelfare: "Tierschutz",
-            MentalHealth: "Gesundheit",
-            Refugees: "Geflüchtete",
-            Democracy: "Demokratie"
-        }
-    }
-};
+let translations = {};
+
+async function loadTranslations(lang) {
+    const response = await fetch(`/i18n/${lang}.json`);
+    return await response.json();
+}
+
+
 
 // Detect browser language
 function detectLanguage() {
@@ -177,8 +25,8 @@ function detectLanguage() {
 }
 
 const currentLang = detectLanguage();
-const t = (key, replacements = {}) => {
-    let text = translations[currentLang][key] || translations.en[key] || key;
+let t = (key, replacements = {}) => {
+    let text = translations[key] || key;
     for (const [k, v] of Object.entries(replacements)) {
         text = text.replace(`{${k}}`, v);
     }
@@ -193,8 +41,8 @@ function applyTranslations() {
     });
     // Update page title
     document.title = currentLang === 'de' 
-        ? 'OneGood – Tu heute etwas Gutes' 
-        : 'OneGood – Do one good thing today';
+        ? 'TuWasGutes – Tu heute etwas Gutes' 
+        : 'TuWasGutes – Do one good thing today';
 }
 
 // ============ DOM Elements ============
@@ -308,6 +156,12 @@ function buildCategorySelector() {
         btn.dataset.category = key;
         btn.innerHTML = `${formatCategory(key)}<span class="pill-count">${count}</span>`;
 
+        // Highlight restored category visually
+        if (selectedCategory === key) {
+            btn.classList.add('highlight-category');
+            setTimeout(() => btn.classList.remove('highlight-category'), 1200);
+        }
+
         if (isDisabled) {
             btn.disabled = true;
         } else {
@@ -349,7 +203,12 @@ function setupFilterToggle() {
 }
 
 function selectCategory(category) {
+
     selectedCategory = category;
+    // Store selected category in localStorage
+    try {
+        localStorage.setItem(STORAGE_KEY_CATEGORY, category);
+    } catch {}
 
     document.querySelectorAll('.category-pill').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.category === category);
@@ -498,10 +357,25 @@ function stripHtml(html) {
 }
 
 function formatCategory(category) {
-    if (!category) return currentLang === 'de' ? 'Projekt' : 'Cause';
-    // Use translated category name if available
-    const categories = translations[currentLang]?.categories || translations.en.categories;
-    return categories[category] || category.replace(/([A-Z])/g, ' $1').trim();
+    const categories = translations.categories;
+    return categories && categories[category] ? categories[category] : category.replace(/([A-Z])/g, ' $1').trim();
+}
+
+async function sendAnalyticsEvent(eventType, detail) {
+    try {
+        await fetch(`${API_BASE}/api/analytics`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                eventType: eventType,
+                userAgent: navigator.userAgent,
+                browserLanguage: navigator.language || navigator.userLanguage,
+                actionDetail: detail || null
+            })
+        });
+    } catch (e) {
+        // Ignore analytics errors
+    }
 }
 
 // API functions
@@ -638,6 +512,37 @@ function renderAction(action) {
     show(elements.actionCard);
 }
 
+function getMonthlyCompletionCount() {
+    // Store completions as an array of ISO date strings for the current month
+    const key = 'onegood_monthly_completions';
+    const now = new Date();
+    const month = now.getMonth();
+    const year = now.getFullYear();
+    let completions = [];
+    try {
+        completions = JSON.parse(localStorage.getItem(key) || '[]');
+    } catch {}
+    // Filter for this month
+    completions = completions.filter(dateStr => {
+        const d = new Date(dateStr);
+        return d.getMonth() === month && d.getFullYear() === year;
+    });
+    return completions.length;
+}
+
+function addMonthlyCompletion() {
+    const key = 'onegood_monthly_completions';
+    let completions = [];
+    try {
+        completions = JSON.parse(localStorage.getItem(key) || '[]');
+    } catch {}
+    const today = new Date().toISOString().slice(0, 10);
+    if (!completions.includes(today)) {
+        completions.push(today);
+        localStorage.setItem(key, JSON.stringify(completions));
+    }
+}
+
 function renderCompletion(headline, category) {
     const streak = getStreak();
     setSupportBannerProminent(true);
@@ -647,6 +552,14 @@ function renderCompletion(headline, category) {
         elements.streakText.textContent = t('streakFirstDay');
     } else {
         elements.streakText.textContent = t('streakDay', { count: streak.count }) + ' — ' + t('streakMessage', { count: streak.count });
+    }
+
+    // Monthly completion counter
+    addMonthlyCompletion();
+    const monthlyCount = getMonthlyCompletionCount();
+    const monthlyEl = document.getElementById('monthly-completion');
+    if (monthlyEl) {
+        monthlyEl.textContent = t('monthlyCompletionCounter', { count: monthlyCount });
     }
 
     hideAll();
@@ -796,6 +709,9 @@ async function handleAction() {
 
     // Save today's completion
     saveTodayCompletion(currentAction.headline, currentAction.causeCategory);
+
+    // Track action completion analytics event
+    sendAnalyticsEvent('action_complete', currentAction.headline);
 
     // Show completion screen — user is DONE for today
     renderCompletion(currentAction.headline, currentAction.causeCategory);
@@ -991,6 +907,30 @@ async function init() {
     if (elements.exploreMoreBtn) {
         elements.exploreMoreBtn.addEventListener('click', enterExploreMode);
     }
+    // Remind me tomorrow button
+    var remindBtn = document.getElementById('remind-btn');
+    if (remindBtn) {
+        remindBtn.addEventListener('click', function() {
+            if (!('Notification' in window)) {
+                showToast(t('notificationsNotSupported'));
+                return;
+            }
+            Notification.requestPermission().then(function(permission) {
+                if (permission === 'granted') {
+                    // Schedule notification for 24h later
+                    var title = t('reminderTitle');
+                    var body = t('reminderBody');
+                    var delay = 24 * 60 * 60 * 1000; // 24h in ms
+                    setTimeout(function() {
+                        new Notification(title, { body: body, icon: '/favicon-192x192.png' });
+                    }, delay);
+                    showToast(t('reminderScheduled'));
+                } else {
+                    showToast(t('notificationsNotAllowed'));
+                }
+            });
+        });
+    }
 
     // Explore mode back button
     if (elements.backToTodayBtn) {
@@ -1043,7 +983,27 @@ function showLegalModal(type) {
     modal.classList.remove('hidden');
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+    const lang = detectLanguage();
+    translations = await loadTranslations(lang);
+
+    // Track site visit analytics event
+    sendAnalyticsEvent('visit');
+
+    // Restore selected category from localStorage if present
+    try {
+        const storedCategory = localStorage.getItem(STORAGE_KEY_CATEGORY);
+        if (storedCategory !== null && storedCategory !== undefined) {
+            selectedCategory = storedCategory;
+        }
+    } catch {}
+    t = (key, replacements = {}) => {
+        let text = translations[key] || key;
+        for (const [k, v] of Object.entries(replacements)) {
+            text = text.replace(`{${k}}`, v);
+        }
+        return text;
+    };
     applyTranslations();
     if (document.getElementById('footer-year')) {
         document.getElementById('footer-year').textContent = new Date().getFullYear();
@@ -1058,7 +1018,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (close) close.addEventListener('click', function() {
         document.getElementById('legal-modal').classList.add('hidden');
     });
+    init();
 });
-
-document.addEventListener('DOMContentLoaded', init);
 })();

@@ -14,11 +14,11 @@ builder.Services.AddHostedService<OutcomeAggregatorWorker>();
 
 var host = builder.Build();
 
-// Ensure database is created (needed for SQLite on first run)
+// Apply EF Core migrations automatically on startup
 using (var scope = host.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<OneGoodDbContext>();
-    await db.InitializeAsync();
+    db.Database.Migrate();
 }
 
 await host.RunAsync();

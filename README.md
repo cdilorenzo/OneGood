@@ -10,7 +10,12 @@ OneGood is an open source platform for surfacing one impactful action per day, b
 - AI-powered content (supports Groq, Gemini, Anthropic, and more)
 - PostgreSQL database support
 - Privacy-first: only anonymous data for streak/progress tracking
-- Localized UI (EN/DE)
+- Basic site/app usage analytics (see AnalyticsEvents table; tracked via backend API and frontend JS)
+- Category filter memory: last used category is stored in browser localStorage and visually restored/highlighted on next visit
+- App version is shown in the footer; update version string in index.html as needed
+- Localized UI (EN/DE) with all user-facing text managed in resource files (see `src/OneGood.Api/wwwroot/i18n/` and `src/OneGood.Core/Resources/`)
+- No user-facing text hardcoded in HTML, JS, or C#; all localization is managed centrally
+- Easy to add new languages (see `docs/localization.md`)
 - Open source under the MIT License
 
 ## Project Structure
@@ -63,7 +68,13 @@ dotnet restore
 dotnet build
 ```
 
-4. **Run the API:**
+
+4. **Apply database migrations:**
+```sh
+dotnet ef database update --project src/OneGood.Infrastructure/OneGood.Infrastructure.csproj --startup-project src/OneGood.Api/OneGood.Api.csproj
+```
+
+5. **Run the API:**
 ```sh
 dotnet run --project src/OneGood.Api/OneGood.Api.csproj
 ```
@@ -73,6 +84,7 @@ dotnet run --project src/OneGood.Api/OneGood.Api.csproj
 dotnet build src/OneGood.Maui/OneGood.Maui.csproj
 # Then deploy to your device/emulator via Visual Studio or CLI
 ```
+
 
 6. **Run the worker service:**
 ```sh
@@ -91,6 +103,10 @@ Contributions are welcome! Please open issues or pull requests for bugs, feature
 - Follow .NET and C# best practices.
 - Do not commit secrets or API keys.
 - Keep the code privacy-friendly and accessible.
+- For any user-facing text, always add/edit translations in the resource files (`en.json`, `de.json`, `.resx`) and never hardcode strings in code or markup. See [docs/localization.md](docs/localization.md) for details.
+- For analytics, see `src/OneGood.Api/Controllers/AnalyticsController.cs` and the frontend JS for event tracking.
+- For category memory, see the logic in `src/OneGood.Api/wwwroot/js/app.js` (localStorage and UI highlight).
+- For versioning, update the version string in the footer of `index.html`.
 
 ## License
 

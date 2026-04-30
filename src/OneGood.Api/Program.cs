@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.EntityFrameworkCore;
 using OneGood.Api;
 using OneGood.Api.Hubs;
 using OneGood.Api.Services;
@@ -64,12 +65,11 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
-
-// Ensure database is created
+// Apply EF Core migrations automatically on startup
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<OneGoodDbContext>();
-    await db.InitializeAsync();
+    db.Database.Migrate();
 
     // Only seed dummy data if explicitly enabled in appsettings
     var useSeedData = app.Configuration.GetValue<bool>("Features:UseSeedData");

@@ -24,7 +24,10 @@ public class AiController : ControllerBase
     public async Task<ActionResult<RegenerateResponse>> Regenerate([FromBody] RegenerateRequest req)
     {
         if (req is null || string.IsNullOrWhiteSpace(req.Text))
-            return BadRequest("Missing text");
+        {
+            var msg = ApiMessages.Error_MissingText;
+            return BadRequest(msg);
+        }
 
         // Build a clear prompt that asks for a short human-friendly summary.
         // Respect requested target language if provided.
@@ -44,7 +47,8 @@ Text:
         catch (Exception)
         {
             // Don't leak provider details to the client
-            return StatusCode(500, "AI generation failed");
+            var msg = ApiMessages.Error_AIGenerationFailed;
+            return StatusCode(500, msg);
         }
     }
 
@@ -57,7 +61,10 @@ Text:
     public async Task<ActionResult<TranslateMetadataResponse>> TranslateMetadata([FromBody] TranslateMetadataRequest req)
     {
         if (req is null)
-            return BadRequest("Missing request body");
+        {
+            var msg = ApiMessages.Error_MissingRequestBody;
+            return BadRequest(msg);
+        }
 
         var sourceLang = req.SourceLang ?? "de";
         var targetLang = req.TargetLang ?? "en";
