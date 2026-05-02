@@ -28,6 +28,20 @@
         <!-- Main Content (hidden initially) -->
         <main id="content" class="hidden w-full max-w-md">
 
+            <!-- App Header Row -->
+            <div class="flex items-center gap-2 mb-3 relative">
+                <h2 class="text-base font-bold text-emerald-400 tracking-wide">TuWasGutes</h2>
+                <button id="info-btn" aria-label="Info" class="text-slate-400 hover:text-emerald-400 transition-colors leading-none text-base">ℹ️</button>
+                <!-- Info Popover -->
+                <div id="info-popover" class="hidden absolute left-0 top-full mt-2 z-30 bg-slate-800 border border-slate-700 rounded-xl shadow-xl p-4" style="max-width:280px;">
+                    <p class="text-sm font-semibold text-emerald-400 mb-1">Was ist TuWasGutes?</p>
+                    <p class="text-sm text-slate-300 leading-relaxed">Jeden Tag schlagen wir dir eine konkrete gute Tat vor — spenden, unterzeichnen, schreiben oder teilen. Eine Aktion. Eine Minute. Ein kleiner Unterschied. Die App kommt bald. 📱</p>
+                </div>
+            </div>
+
+            <!-- Onboarding subtitle (shown on first load, before any action is interacted with) -->
+            <p id="onboarding-subtitle" class="text-slate-400 text-sm mb-3">Heute deine gute Tat — lies, handle, mach einen Unterschied.</p>
+
             <!-- Action Type Filter -->
             <div id="type-filter" class="flex gap-1.5 mb-4 overflow-x-auto pb-1">
                 <button class="type-pill active" data-type="">🌍 <span data-i18n="allTypes">All</span></button>

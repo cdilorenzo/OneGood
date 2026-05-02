@@ -6,6 +6,8 @@ const STORAGE_KEY_SEEN = 'onegood_seen_causes';
 const STORAGE_KEY_ACTED = 'onegood_acted_causes';
 const STORAGE_KEY_STREAK = 'onegood_streak';
 const STORAGE_KEY_TODAY = 'onegood_today_completion';
+const STORAGE_KEY_CATEGORY = 'onegood_selected_category';
+const STORAGE_KEY_TYPE = 'onegood_selected_type';
 
 // ============ i18n (Internationalization) ============
 let translations = {};
@@ -118,7 +120,9 @@ function setupTypePills(containerId, onChange) {
         btn.addEventListener('click', () => {
             container.querySelectorAll('.type-pill').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            onChange(btn.dataset.type || '');
+            const type = btn.dataset.type || '';
+            try { localStorage.setItem(STORAGE_KEY_TYPE, type); } catch {}
+            onChange(type);
         });
     });
 }
@@ -275,6 +279,9 @@ function hideAll() {
     // Hide main type filter when not in main view
     var typeFilter = document.getElementById('type-filter');
     if (typeFilter) typeFilter.classList.add('hidden');
+    // Hide onboarding subtitle once a state is rendered
+    var onboardingSubtitle = document.getElementById('onboarding-subtitle');
+    if (onboardingSubtitle) onboardingSubtitle.classList.add('hidden');
 }
 
 function showMainTypeFilter() {
@@ -876,6 +883,21 @@ async function init() {
     // Apply translations first
     applyTranslations();
 
+    // Info popover toggle
+    var infoBtn = document.getElementById('info-btn');
+    var infoPopover = document.getElementById('info-popover');
+    if (infoBtn && infoPopover) {
+        infoBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            infoPopover.classList.toggle('hidden');
+        });
+        document.addEventListener('click', function(e) {
+            if (!infoPopover.contains(e.target) && e.target !== infoBtn) {
+                infoPopover.classList.add('hidden');
+            }
+        });
+    }
+
     // Event listeners
     elements.actionBtn.addEventListener('click', handleAction);
     elements.retryBtn.addEventListener('click', () => loadAction());
@@ -895,6 +917,7 @@ async function init() {
         currentAction = null;
         loadAction();
     });
+    syncTypePillsUI('type-filter', selectedActionType);
 
     // Action type filter on explore mode
     setupTypePills('explore-type-filter', function(type) {
@@ -995,6 +1018,13 @@ document.addEventListener('DOMContentLoaded', async function() {
         const storedCategory = localStorage.getItem(STORAGE_KEY_CATEGORY);
         if (storedCategory !== null && storedCategory !== undefined) {
             selectedCategory = storedCategory;
+        }
+    } catch {}
+    // Restore selected action type from localStorage if present
+    try {
+        const storedType = localStorage.getItem(STORAGE_KEY_TYPE);
+        if (storedType !== null && storedType !== undefined) {
+            selectedActionType = storedType;
         }
     } catch {}
     t = (key, replacements = {}) => {
