@@ -1038,6 +1038,15 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (document.getElementById('footer-year')) {
         document.getElementById('footer-year').textContent = new Date().getFullYear();
     }
+    // Fetch and render app version dynamically
+    try {
+        const vRes = await fetch(`${API_BASE}/api/version`);
+        if (vRes.ok) {
+            const vData = await vRes.json();
+            const vSpan = document.getElementById('app-version');
+            if (vSpan && vData.version) vSpan.textContent = 'v' + vData.version;
+        }
+    } catch {}
     const imprint = document.getElementById('footer-imprint-link');
     const privacy = document.getElementById('footer-privacy-link');
     const external = document.getElementById('footer-external-link');

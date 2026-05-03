@@ -4,6 +4,13 @@ using OneGood.Infrastructure.Data;
 
 namespace OneGood.Api.Controllers
 {
+    public record TrackEventRequest(
+        string EventType,
+        string? UserAgent,
+        string? BrowserLanguage,
+        string? ActionDetail
+    );
+
     [ApiController]
     [Route("api/[controller]")]
     public class AnalyticsController : ControllerBase
@@ -15,9 +22,17 @@ namespace OneGood.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Track([FromBody] AnalyticsEvent evt)
+        public async Task<IActionResult> Track([FromBody] TrackEventRequest req)
         {
-            evt.Timestamp = DateTime.UtcNow;
+            var evt = new AnalyticsEvent
+            {
+                Timestamp = DateTime.UtcNow,
+                EventType = req.EventType ?? string.Empty,
+                UserAgent = req.UserAgent,
+                BrowserLanguage = req.BrowserLanguage,
+                ActionDetail = req.ActionDetail,
+                IpAddress = HttpContext.Connection.RemoteIpAddress?.ToString()
+            };
             _db.AnalyticsEvents.Add(evt);
             await _db.SaveChangesAsync();
             return Ok();
