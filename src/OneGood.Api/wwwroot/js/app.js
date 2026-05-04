@@ -42,6 +42,7 @@ function applyTranslations() {
         el.textContent = t(key);
     });
     // Update page title
+    document.documentElement.lang = currentLang;
     document.title = currentLang === 'de' 
         ? 'TuWasGutes – Tu heute etwas Gutes' 
         : 'TuWasGutes – Do one good thing today';
