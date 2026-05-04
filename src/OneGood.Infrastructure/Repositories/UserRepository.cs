@@ -46,7 +46,8 @@ public class UserRepository : IUserRepository
         if (profile is not null)
         {
             profile.ActionsCompleted++;
-            profile.CurrentStreak = CalculateStreak(profile.CurrentStreak, DateTime.UtcNow);
+            profile.CurrentStreak = CalculateStreak(profile.CurrentStreak, profile.LastActionDate, userAction.CompletedAt);
+            profile.LastActionDate = userAction.CompletedAt;
             if (userAction.AmountDonated.HasValue)
                 profile.TotalDonated += userAction.AmountDonated.Value;
         }
@@ -80,9 +81,34 @@ public class UserRepository : IUserRepository
         await _db.SaveChangesAsync();
     }
 
-    private static int CalculateStreak(int currentStreak, DateTime actionDate)
+    public async Task<bool> DeleteAsync(Guid profileId)
     {
-        // Simple streak logic - in production, check last action date
-        return currentStreak + 1;
+        var profile = await _db.UserProfiles.FindAsync(profileId);
+        if (profile is null) return false;
+
+        // GDPR: anonymise the profile rather than hard-delete so analytics counts remain valid
+        profile.Email = null;
+        profile.DisplayName = "Deleted User";
+        profile.GoogleId = null;
+        profile.AvatarUrl = null;
+        await _db.SaveChangesAsync();
+        return true;
+    }
+
+    private static int CalculateStreak(int currentStreak, DateTime? lastActionDate, DateTime actionDate)
+    {
+        if (lastActionDate is null)
+            return 1;
+
+        var lastDate = lastActionDate.Value.Date;
+        var today = actionDate.Date;
+
+        if (lastDate == today)
+            return currentStreak; // already acted today, no change
+
+        if (lastDate == today.AddDays(-1))
+            return currentStreak + 1; // consecutive day
+
+        return 1; // streak broken
     }
 }

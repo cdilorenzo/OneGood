@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OneGood.Infrastructure.Data;
@@ -11,9 +12,11 @@ using OneGood.Infrastructure.Data;
 namespace OneGood.Infrastructure.Migrations
 {
     [DbContext(typeof(OneGoodDbContext))]
-    partial class OneGoodDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260504091716_AddUserProfileExtensions")]
+    partial class AddUserProfileExtensions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

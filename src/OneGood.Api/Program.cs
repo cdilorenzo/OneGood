@@ -28,26 +28,39 @@ builder.Services.AddSingleton<ICauseNotifier, SignalRCauseNotifier>();
 // Google OAuth Authentication (optional - only if configured)
 var googleClientId = builder.Configuration["Authentication:Google:ClientId"];
 var googleClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+var googleAuthConfigured = !string.IsNullOrEmpty(googleClientId) && !string.IsNullOrEmpty(googleClientSecret);
 
-if (!string.IsNullOrEmpty(googleClientId) && !string.IsNullOrEmpty(googleClientSecret))
-{
-    builder.Services.AddAuthentication(options =>
+var isDevelopment = builder.Environment.IsDevelopment();
+
+// Always register cookie auth so UseAuthentication() never throws.
+// Google handler is added on top only when credentials are present.
+var authBuilder = builder.Services
+    .AddAuthentication(options =>
     {
         options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     })
     .AddCookie(options =>
     {
-        options.Cookie.SameSite = SameSiteMode.None;
-        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    })
-    .AddGoogle(options =>
+        // In dev: Lax + HTTP-allowed so the correlation cookie survives the OAuth round-trip
+        // In prod: None + Secure for cross-site cookie support
+        options.Cookie.SameSite = isDevelopment ? SameSiteMode.Lax : SameSiteMode.None;
+        options.Cookie.SecurePolicy = isDevelopment ? CookieSecurePolicy.SameAsRequest : CookieSecurePolicy.Always;
+    });
+
+if (googleAuthConfigured)
+{
+    authBuilder.AddGoogle(options =>
     {
-        options.ClientId = googleClientId;
-        options.ClientSecret = googleClientSecret;
+        options.ClientId = googleClientId!;
+        options.ClientSecret = googleClientSecret!;
         options.Scope.Add("email");
         options.Scope.Add("profile");
         options.SaveTokens = true;
+        options.CallbackPath = "/api/auth/google-callback";
+        // Fix correlation cookie in dev (same issue — must survive HTTP redirect)
+        options.CorrelationCookie.SameSite = isDevelopment ? SameSiteMode.Lax : SameSiteMode.None;
+        options.CorrelationCookie.SecurePolicy = isDevelopment ? CookieSecurePolicy.SameAsRequest : CookieSecurePolicy.Always;
     });
 }
 

@@ -93,6 +93,8 @@ let currentAction = null;
 let selectedCategory = '';
 let isExploreMode = false;
 let selectedActionType = '';
+let currentUser = null; // { userId, name, avatar } or null
+let googleEnabled = false; // set from /api/version
 
 // Category selector
 const CATEGORY_KEYS = [
@@ -567,11 +569,13 @@ function renderCompletion(headline, category) {
     const monthlyCount = getMonthlyCompletionCount();
     const monthlyEl = document.getElementById('monthly-completion');
     if (monthlyEl) {
-        monthlyEl.textContent = t('monthlyCompletionCounter', { count: monthlyCount });
+        const key = monthlyCount === 1 ? 'monthlyCompletionCounter' : 'monthlyCompletionCounterPlural';
+        monthlyEl.textContent = t(key, { count: monthlyCount });
     }
 
     hideAll();
     show(elements.completionState);
+    renderUserUI();
 }
 
 function renderError() {
@@ -721,6 +725,9 @@ async function handleAction() {
     // Track action completion analytics event
     sendAnalyticsEvent('action_complete', currentAction.headline);
 
+    // Sync streak to server if logged in
+    syncStreakToServer();
+
     // Show completion screen — user is DONE for today
     renderCompletion(currentAction.headline, currentAction.causeCategory);
 }
@@ -775,6 +782,114 @@ function toggleStoryText(showWhich) {
         elements.summary.textContent = stripHtml(currentAction.causeSummary);
         elements.storyBadge.classList.add('active-badge');
         elements.storyBadgeOriginal.classList.remove('active-badge');
+    }
+}
+
+// ============ Auth / Account ============
+const STORAGE_KEY_USER = 'onegood_user';
+
+function loadStoredUser() {
+    try {
+        const data = localStorage.getItem(STORAGE_KEY_USER);
+        return data ? JSON.parse(data) : null;
+    } catch { return null; }
+}
+
+function saveStoredUser(user) {
+    try {
+        if (user) localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(user));
+        else localStorage.removeItem(STORAGE_KEY_USER);
+    } catch {}
+}
+
+function renderUserUI() {
+    const userMenu = document.getElementById('user-menu');
+    const userNameEl = document.getElementById('user-name');
+    const userAvatarEl = document.getElementById('user-avatar');
+    const signinBlock = document.getElementById('google-signin-block');
+
+    if (currentUser) {
+        if (userMenu) userMenu.classList.remove('hidden');
+        if (userNameEl) userNameEl.textContent = currentUser.name || '';
+        if (userAvatarEl && currentUser.avatar) {
+            userAvatarEl.src = currentUser.avatar;
+            userAvatarEl.classList.remove('hidden');
+        }
+        if (signinBlock) signinBlock.classList.add('hidden');
+    } else {
+        if (userMenu) userMenu.classList.add('hidden');
+        // Show sign-in block whenever the user is not logged in
+        if (signinBlock) signinBlock.classList.remove('hidden');
+        const loginBtn = document.getElementById('login-btn');
+        if (loginBtn) {
+            loginBtn.disabled = !googleEnabled;
+            loginBtn.style.opacity = googleEnabled ? '' : '0.45';
+            loginBtn.title = googleEnabled ? '' : 'Google login not configured on this server';
+        }
+    }
+}
+
+async function syncStreakToServer() {
+    if (!currentUser) return;
+    try {
+        const streak = getStreak();
+        const monthlyCount = getMonthlyCompletionCount();
+        await fetch(`${API_BASE}/api/auth/sync?userId=${currentUser.userId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ streak: streak.count, actionsCompleted: monthlyCount })
+        });
+    } catch {}
+}
+
+function setupAuthUI() {
+    const loginBtn = document.getElementById('login-btn');
+    const userMenuBtn = document.getElementById('user-menu-btn');
+    const userDropdown = document.getElementById('user-dropdown');
+    const logoutBtn = document.getElementById('logout-btn');
+    const deleteBtn = document.getElementById('delete-account-btn');
+
+    if (loginBtn) {
+        loginBtn.addEventListener('click', () => {
+            window.location.href = `${API_BASE}/api/auth/login/google?returnUrl=${encodeURIComponent(window.location.href.split('?')[0])}`;
+        });
+    }
+
+    if (userMenuBtn && userDropdown) {
+        userMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            userDropdown.classList.toggle('hidden');
+        });
+        document.addEventListener('click', (e) => {
+            if (!userDropdown.contains(e.target) && e.target !== userMenuBtn) {
+                userDropdown.classList.add('hidden');
+            }
+        });
+    }
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+            try { await fetch(`${API_BASE}/api/auth/logout`, { method: 'POST' }); } catch {}
+            currentUser = null;
+            saveStoredUser(null);
+            renderUserUI();
+            if (userDropdown) userDropdown.classList.add('hidden');
+        });
+    }
+
+    if (deleteBtn) {
+        deleteBtn.addEventListener('click', async () => {
+            if (!currentUser) return;
+            if (!confirm(t('deleteAccountConfirm'))) return;
+            try {
+                await fetch(`${API_BASE}/api/auth/account?userId=${currentUser.userId}`, { method: 'DELETE' });
+            } catch {}
+            currentUser = null;
+            saveStoredUser(null);
+            renderUserUI();
+            if (userDropdown) userDropdown.classList.add('hidden');
+            showToast(t('deleteAccountDone'));
+        });
     }
 }
 
@@ -1039,13 +1154,14 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (document.getElementById('footer-year')) {
         document.getElementById('footer-year').textContent = new Date().getFullYear();
     }
-    // Fetch and render app version dynamically
+    // Fetch and render app version dynamically; also get feature flags
     try {
         const vRes = await fetch(`${API_BASE}/api/version`);
         if (vRes.ok) {
             const vData = await vRes.json();
             const vSpan = document.getElementById('app-version');
             if (vSpan && vData.version) vSpan.textContent = 'v' + vData.version;
+            googleEnabled = !!vData.googleEnabled;
         }
     } catch {}
     const imprint = document.getElementById('footer-imprint-link');
@@ -1058,6 +1174,33 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (close) close.addEventListener('click', function() {
         document.getElementById('legal-modal').classList.add('hidden');
     });
+
+    // Handle OAuth redirect: ?userId=...&name=...
+    const params = new URLSearchParams(window.location.search);
+    const redirectUserId = params.get('userId');
+    const redirectName = params.get('name');
+    if (redirectUserId) {
+        // Fetch full profile to get avatar
+        try {
+            const meRes = await fetch(`${API_BASE}/api/auth/me?userId=${redirectUserId}`);
+            if (meRes.ok) {
+                const me = await meRes.json();
+                if (me.isLoggedIn) {
+                    currentUser = { userId: me.userId, name: me.name, avatar: me.avatar };
+                    saveStoredUser(currentUser);
+                }
+            }
+        } catch {}
+        // Clean up URL
+        const cleanUrl = window.location.pathname;
+        history.replaceState(null, '', cleanUrl);
+    } else {
+        // Restore from localStorage
+        currentUser = loadStoredUser();
+    }
+
+    renderUserUI();
+    setupAuthUI();
     init();
 });
 })();

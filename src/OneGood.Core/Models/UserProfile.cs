@@ -31,4 +31,5 @@ public class UserProfile
     public int ActionsCompleted { get; set; }
     public decimal TotalDonated { get; set; }
     public int CurrentStreak { get; set; }
+    public DateTime? LastActionDate { get; set; }
 }

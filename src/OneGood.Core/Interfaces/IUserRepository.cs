@@ -14,4 +14,5 @@ public interface IUserRepository
     Task CreateAsync(User user);
     Task CreateAsync(UserProfile profile);
     Task UpdateAsync(UserProfile profile);
+    Task<bool> DeleteAsync(Guid profileId);
 }

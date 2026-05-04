@@ -16,7 +16,8 @@ namespace OneGood.Api.Controllers
         public IActionResult Get()
         {
             var version = _config["AppVersion"] ?? "1.0.0";
-            return Ok(new { version });
+            var googleEnabled = !string.IsNullOrEmpty(_config["Authentication:Google:ClientId"]);
+            return Ok(new { version, googleEnabled });
         }
     }
 }
